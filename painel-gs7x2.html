@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel - MegaStreamHD</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="admin.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="admin-body">
+
+<!-- ADMIN LOGIN -->
+<div id="admin-login-screen">
+  <div class="admin-login-box">
+    <div class="admin-logo">
+      <i class="fas fa-shield-alt"></i>
+      <h2>Painel Administrativo</h2>
+      <p>MegaStreamHD</p>
+    </div>
+    <input type="email" id="admin-user-input" placeholder="Email admin">
+    <input type="password" id="admin-pass-input" placeholder="Senha" onkeypress="if(event.key==='Enter')adminLogin()">
+    <div id="admin-login-error" style="color:#e53935;font-size:13px;margin-top:8px;text-align:center;min-height:20px"></div>
+    <button onclick="adminLogin()"><i class="fas fa-lock"></i> Entrar no Painel</button>
+    <a href="index.html" style="color:#888;font-size:13px;text-align:center;display:block;margin-top:12px">← Voltar ao site</a>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-panel" style="display:none">
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar" id="admin-sidebar">
+    <div class="sidebar-logo">
+      <i class="fas fa-play"></i>
+      <span>MegaStream<strong>HD</strong></span>
+    </div>
+    <nav class="sidebar-nav">
+      <button onclick="adminPage('dashboard')" class="active" id="btn-dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
+      <button onclick="adminPage('filmes')" id="btn-filmes"><i class="fas fa-film"></i> Filmes</button>
+      <button onclick="adminPage('series')" id="btn-series"><i class="fas fa-tv"></i> Séries</button>
+      <button onclick="adminPage('episodios')" id="btn-episodios"><i class="fas fa-list"></i> Episódios</button>
+      <button onclick="adminPage('pedidos')" id="btn-pedidos"><i class="fas fa-inbox"></i> Pedidos <span class="badge" id="pedidos-badge">0</span></button>
+      <button onclick="adminPage('hero')" id="btn-hero"><i class="fas fa-images"></i> Banner Hero</button>
+      <button onclick="adminPage('usuarios')" id="btn-usuarios"><i class="fas fa-users"></i> Usuários</button>
+      <button onclick="adminPage('config')" id="btn-config"><i class="fas fa-cog"></i> Configurações</button>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> Ver Site</a>
+      <button onclick="adminLogout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="admin-main">
+    <!-- TOP BAR -->
+    <div class="admin-topbar">
+      <button class="sidebar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <h1 class="admin-page-title" id="admin-title">Dashboard</h1>
+      <div class="admin-user-info">
+        <i class="fas fa-user-circle"></i>
+        <span>Administrador</span>
+      </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="page-dashboard" class="admin-page active">
+      <div class="stats-grid">
+        <div class="stat-card blue">
+          <i class="fas fa-film"></i>
+          <div><span id="stat-filmes">0</span><p>Filmes</p></div>
+        </div>
+        <div class="stat-card purple">
+          <i class="fas fa-tv"></i>
+          <div><span id="stat-series">0</span><p>Séries</p></div>
+        </div>
+        <div class="stat-card green">
+          <i class="fas fa-play-circle"></i>
+          <div><span id="stat-episodios">0</span><p>Episódios</p></div>
+        </div>
+        <div class="stat-card orange">
+          <i class="fas fa-inbox"></i>
+          <div><span id="stat-pedidos">0</span><p>Pedidos</p></div>
+        </div>
+        <div class="stat-card teal">
+          <i class="fas fa-users"></i>
+          <div><span id="stat-usuarios">0</span><p>Usuários</p></div>
+        </div>
+      </div>
+      <div class="recent-grid">
+        <div class="recent-box">
+          <h3><i class="fas fa-clock"></i> Últimos Adicionados</h3>
+          <div id="recent-content"></div>
+        </div>
+        <div class="recent-box">
+          <h3><i class="fas fa-inbox"></i> Pedidos Recentes</h3>
+          <div id="recent-pedidos-admin"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILMES -->
+    <div id="page-filmes" class="admin-page">
+      <div class="admin-toolbar">
+        <input type="text" placeholder="Buscar filme..." id="search-filmes" oninput="searchAdminContent('filmes')">
+        <button class="btn-add" onclick="openContentModal('filme')"><i class="fas fa-plus"></i> Adicionar Filme</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Capa</th><th>Título</th><th>Ano</th><th>Gênero</th><th>Tipo</th><th>Avaliação</th><th>Ações</th></tr></thead>
+          <tbody id="filmes-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SÉRIES -->
+    <div id="page-series" class="admin-page">
+      <div class="admin-toolbar">
+        <input type="text" placeholder="Buscar série..." id="search-series" oninput="searchAdminContent('series')">
+        <button class="btn-add" onclick="openContentModal('serie')"><i class="fas fa-plus"></i> Adicionar Série</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Capa</th><th>Título</th><th>Ano</th><th>Temporadas</th><th>Gênero</th><th>Avaliação</th><th>Ações</th></tr></thead>
+          <tbody id="series-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EPISÓDIOS -->
+    <div id="page-episodios" class="admin-page">
+      <div class="admin-toolbar">
+        <select id="ep-serie-select" onchange="loadEpisodesAdmin()">
+          <option value="">-- Selecione uma Série --</option>
+        </select>
+        <select id="ep-temporada-select" onchange="loadEpisodesAdmin()">
+          <option value="">-- Temporada --</option>
+        </select>
+        <button class="btn-add" onclick="openEpisodeModal()"><i class="fas fa-plus"></i> Adicionar Episódio</button>
+        <button class="btn-secondary" onclick="openSeasonModal()"><i class="fas fa-layer-group"></i> Gerenciar Temporadas</button>
+      </div>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>#</th><th>Título</th><th>Duração</th><th>URL do Vídeo</th><th>Ações</th></tr></thead>
+          <tbody id="episodios-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PEDIDOS -->
+    <div id="page-pedidos" class="admin-page">
+      <h3 style="color:#fff;margin-bottom:16px">Pedidos dos Usuários</h3>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Título Pedido</th><th>Ano</th><th>Observação</th><th>Data</th><th>Ações</th></tr></thead>
+          <tbody id="pedidos-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- HERO BANNER -->
+    <div id="page-hero" class="admin-page">
+      <div class="admin-toolbar">
+        <button class="btn-add" onclick="openHeroModal()"><i class="fas fa-plus"></i> Adicionar ao Hero</button>
+      </div>
+      <div class="hero-admin-grid" id="hero-admin-grid"></div>
+    </div>
+
+    <!-- USUÁRIOS -->
+    <div id="page-usuarios" class="admin-page">
+      <h3 style="color:#fff;margin-bottom:16px">Usuários Registrados</h3>
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead><tr><th>Nome</th><th>E-mail</th><th>Cadastro</th><th>Ações</th></tr></thead>
+          <tbody id="usuarios-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- CONFIG -->
+    <div id="page-config" class="admin-page">
+      <div class="config-form">
+        <h3>Configurações do Site</h3>
+        <label>Nome do Site</label>
+        <input type="text" id="cfg-sitename" value="MegaStreamHD">
+        <label>Banner de Informação</label>
+        <input type="text" id="cfg-banner" value="Use VPN e não perca acesso ao site.">
+        <label>Mostrar Banner</label>
+        <select id="cfg-showbanner">
+          <option value="1">Sim</option>
+          <option value="0">Não</option>
+        </select>
+        <button class="btn-primary" onclick="saveConfig()"><i class="fas fa-save"></i> Salvar Configurações</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODAL ADICIONAR/EDITAR CONTEÚDO -->
+<div class="modal-overlay" id="admin-modal-overlay" onclick="closeAdminModal()"></div>
+<div class="admin-modal" id="admin-modal">
+  <div class="admin-modal-header">
+    <h3 id="admin-modal-title">Adicionar Conteúdo</h3>
+    <button onclick="closeAdminModal()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="admin-modal-body" id="admin-modal-body"></div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast-admin"></div>
+
+<!-- Supabase client (obrigatório) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-config.js"></script>
+<script src="data.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

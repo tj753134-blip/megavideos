@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MegaStream HD</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<!-- OVERLAY DE LOADING GLOBAL -->
+<div id="app-loading" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);color:#fff;z-index:9999;font-size:18px">
+  Carregando site...
+</div>
+<!-- HEADER -->
+<header class="header" id="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <span class="logo-text">MEGASTREAM</span><span class="logo-icon"><i class="fas fa-play"></i></span><span class="logo-hd">HD</span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="index.html" class="nav-link active">Inicio</a>
+      <a href="#" class="nav-link nav-highlight">Aplicativo</a>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link">Filmes <i class="fas fa-chevron-down"></i></a>
+        <div class="dropdown-menu" id="filmes-menu">
+          <a href="#" onclick="filterContent('filmes','todos')">Todos os Filmes</a>
+          <a href="#" onclick="filterContent('filmes','animacao')">Animação</a>
+          <a href="#" onclick="filterContent('filmes','aventura')">Aventura</a>
+          <a href="#" onclick="filterContent('filmes','acao')">Ação</a>
+          <a href="#" onclick="filterContent('filmes','comedia')">Comédia</a>
+          <a href="#" onclick="filterContent('filmes','crime')">Crime</a>
+          <a href="#" onclick="filterContent('filmes','documentario')">Documentário</a>
+          <a href="#" onclick="filterContent('filmes','drama')">Drama</a>
+          <a href="#" onclick="filterContent('filmes','familia')">Família</a>
+          <a href="#" onclick="filterContent('filmes','fantasia')">Fantasia</a>
+          <a href="#" onclick="filterContent('filmes','faroeste')">Faroeste</a>
+          <a href="#" onclick="filterContent('filmes','ficcao')">Ficção Científica</a>
+          <a href="#" onclick="filterContent('filmes','horror')">Horror</a>
+          <a href="#" onclick="filterContent('filmes','romance')">Romance</a>
+          <a href="#" onclick="filterContent('filmes','thriller')">Thriller</a>
+        </div>
+      </div>
+      <div class="nav-dropdown">
+        <a href="#" class="nav-link">Séries <i class="fas fa-chevron-down"></i></a>
+        <div class="dropdown-menu" id="series-menu">
+          <a href="#" onclick="filterContent('series','todos')">Todas as Series</a>
+          <a href="#" onclick="filterContent('series','animacao')">Animação</a>
+          <a href="#" onclick="filterContent('series','aventura')">Aventura</a>
+          <a href="#" onclick="filterContent('series','acao')">Ação</a>
+          <a href="#" onclick="filterContent('series','comedia')">Comédia</a>
+          <a href="#" onclick="filterContent('series','crime')">Crime</a>
+          <a href="#" onclick="filterContent('series','documentario')">Documentário</a>
+          <a href="#" onclick="filterContent('series','drama')">Drama</a>
+          <a href="#" onclick="filterContent('series','familia')">Família</a>
+          <a href="#" onclick="filterContent('series','fantasia')">Fantasia</a>
+          <a href="#" onclick="filterContent('series','faroeste')">Faroeste</a>
+          <a href="#" onclick="filterContent('series','ficcao')">Ficção Científica</a>
+          <a href="#" onclick="filterContent('series','horror')">Horror</a>
+          <a href="#" onclick="filterContent('series','romance')">Romance</a>
+          <a href="#" onclick="filterContent('series','thriller')">Thriller</a>
+        </div>
+      </div>
+      <a href="#" class="nav-link" onclick="showPage('pedidos')">Pedidos</a>
+    </nav>
+    <div class="header-actions">
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="Procurar por um filme, uma série...">
+        <button onclick="searchContent(document.getElementById('search-input').value)"><i class="fas fa-search"></i></button>
+      </div>
+      <button class="btn-register" onclick="showModal('login')">Entrar</button>
+      <button class="btn-admin" style="display:none" onclick="goAdmin()" title="Admin"><i class="fas fa-shield-alt"></i></button>
+    </div>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()"><i class="fas fa-bars"></i></button>
+  </div>
+</header>
+
+<!-- INFO BANNER -->
+<div class="info-banner">
+  <i class="fas fa-info-circle"></i>
+  <strong>INFORMAÇÃO</strong>aproveite <a href="#">clique aqui</a>. Salve nosso site nos favoritos. <strong>(CTRL + D)</strong>
+</div>
+
+<!-- PAGES -->
+<div id="page-home">
+  <!-- HERO SLIDER -->
+  <section class="hero" id="hero">
+    <div class="hero-slides" id="hero-slides"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content" id="hero-content"></div>
+    <button class="hero-prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+    <button class="hero-next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>
+    <div class="hero-dots" id="hero-dots"></div>
+  </section>
+
+  <!-- LANÇAMENTOS -->
+  <section class="section">
+    <div class="section-header">
+      <h2><i class="fas fa-fire"></i> Lançamentos</h2>
+      <a href="#">Ver todos</a>
+    </div>
+    <div class="cards-row" id="lancamentos-row"></div>
+  </section>
+
+  <!-- SÉRIES EM DESTAQUE -->
+  <section class="section">
+    <div class="section-header">
+      <h2><i class="fas fa-tv"></i> Séries em Destaque</h2>
+      <a href="#">Ver todas</a>
+    </div>
+    <div class="cards-row" id="series-row"></div>
+  </section>
+
+  <!-- FILMES POPULARES -->
+  <section class="section">
+    <div class="section-header">
+      <h2><i class="fas fa-star"></i> Filmes Populares</h2>
+      <a href="#">Ver todos</a>
+    </div>
+    <div class="cards-row" id="filmes-row"></div>
+  </section>
+
+  <!-- ANIMAÇÕES -->
+  <section class="section">
+    <div class="section-header">
+      <h2><i class="fas fa-dragon"></i> Animações</h2>
+      <a href="#">Ver todas</a>
+    </div>
+    <div class="cards-row" id="animacoes-row"></div>
+  </section>
+</div>
+
+<!-- CONTENT LIST PAGE -->
+<div id="page-list" style="display:none">
+  <section class="section" style="padding-top:30px">
+    <div class="list-header">
+      <div>
+        <h2 id="list-title">Conteúdo</h2>
+        <div id="list-filter-info" style="color:#aaa;font-size:13px;margin-top:6px"></div>
+      </div>
+      <div class="list-sort">
+        <span>SORT BY</span>
+        <select onchange="sortList(this.value)">
+          <option value="newest">Mais Recentes</option>
+          <option value="oldest">Mais Antigos</option>
+          <option value="rating">Melhor Avaliados</option>
+          <option value="az">A-Z</option>
+        </select>
+      </div>
+    </div>
+    <div class="pagination" id="list-pagination-top"></div>
+    <div class="cards-grid" id="list-grid"></div>
+    <div class="pagination" id="list-pagination-bottom"></div>
+  </section>
+</div>
+
+<!-- DETAIL PAGE -->
+<div id="page-detail" style="display:none">
+  <div class="detail-container" id="detail-container"></div>
+</div>
+
+<!-- PEDIDOS PAGE -->
+<div id="page-pedidos" style="display:none">
+  <section class="section" style="padding-top:40px">
+    <h2 style="color:#fff;margin-bottom:24px"><i class="fas fa-inbox"></i> Pedidos de Conteúdo</h2>
+    <div class="pedido-form">
+      <input type="text" id="pedido-titulo" placeholder="Nome do filme ou série">
+      <input type="text" id="pedido-ano" placeholder="Ano (opcional)">
+      <textarea id="pedido-obs" placeholder="Observações adicionais..."></textarea>
+      <button class="btn-primary" onclick="enviarPedido()"><i class="fas fa-paper-plane"></i> Enviar Pedido</button>
+    </div>
+    <div class="pedidos-lista" id="pedidos-lista"></div>
+  </section>
+</div>
+
+<!-- SEARCH RESULTS PAGE -->
+<div id="page-search" style="display:none">
+  <section class="section" style="padding-top:30px">
+    <h2 id="search-title" style="color:#fff;margin-bottom:24px">Resultados da busca</h2>
+    <div class="cards-grid" id="search-grid"></div>
+  </section>
+</div>
+
+<!-- PLAYER PAGE -->
+<div id="page-player" style="display:none">
+  <div class="player-container" id="player-container"></div>
+</div>
+
+<!-- MODAL LOGIN/REGISTER -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
+<div class="modal" id="modal-auth">
+  <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+  <div class="modal-tabs">
+    <button id="tab-login" onclick="switchTab('login')" class="active">Entrar</button>
+    <button id="tab-register" onclick="switchTab('register')">Registrar</button>
+  </div>
+  <div id="form-login">
+    <input type="email" id="auth-email" placeholder="E-mail">
+    <input type="password" id="auth-password" placeholder="Senha">
+    <button class="btn-primary" onclick="login()">Entrar</button>
+  </div>
+  <div id="form-register" style="display:none">
+    <input type="text" id="reg-name" placeholder="Nome completo">
+    <input type="email" id="reg-email" placeholder="E-mail">
+    <input type="password" id="reg-password" placeholder="Senha">
+    <input type="password" id="reg-confirm" placeholder="Confirmar senha">
+    <button class="btn-primary" onclick="register()">Criar conta</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- MODAL VERIFICATION -->
+<div class="modal" id="modal-verify" style="display:none;">
+  <div style="padding:20px;max-width:520px;color:#fff;background:#121212;border-radius:8px;margin:60px auto;position:relative">
+    <h3 id="verify-title">Verifique seu e-mail</h3>
+    <p id="verify-desc">Enviamos um e-mail para o seu endereço. Clique no link recebido para ativar sua conta.</p>
+    <div style="margin-top:12px;display:flex;gap:8px">
+      <button class="btn-primary" id="verify-resend">Reenviar e-mail</button>
+      <button class="btn-outline" id="verify-checked">Já verifiquei</button>
+      <button class="btn-secondary" id="verify-close">Fechar</button>
+    </div>
+    <div id="verify-log" style="margin-top:10px;color:#ccc;font-size:13px"></div>
+  </div>
+</div>
+
+<!-- SCROLL TO TOP -->
+<button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Voltar ao topo">
+  <i class="fas fa-chevron-up"></i>
+</button>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <span class="logo-text">MEGASTREAM</span><span class="logo-icon"><i class="fas fa-play"></i></span><span class="logo-hd">HD</span>
+    </div>
+    <p>Assista filmes e séries online em HD, dublado e legendado.</p>
+    <div class="footer-links">
+      <a href="#">Sobre</a>
+      <a href="#">Contato</a>
+      <a href="#">Privacidade</a>
+      <a href="#">Discord</a>
+    </div>
+    <p class="footer-copy">© 2026 MegaStreamHD. Todos os direitos reservados.</p>
+  </div>
+</footer>
+<!-- Supabase (obrigatório) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="supabase-config.js"></script>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

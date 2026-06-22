@@ -1,6 +1,6 @@
 [build]
   publish = "."
-  command = "bash ./generate-supabase-config.sh"
+  command = "bash ./scripts/generate-supabase-config.sh"
 
 [headers]
   [[headers]]

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Relatório — Paradigmas aplicados no MegaStreamHD</title>
+  <style>
+    body{font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif;max-width:860px;margin:36px auto;color:#111;line-height:1.6;padding:24px}
+    h1,h2,h3{color:#0b3b5a}
+    h1{font-size:28px;margin-top:36px}
+    h2{font-size:20px;margin-top:24px}
+    p{margin:12px 0}
+    .cover{display:flex;flex-direction:column;align-items:center;justify-content:center;height:420px;text-align:center}
+    .meta{color:#555;margin-top:8px}
+    .toc{margin:16px 0;padding:12px;background:#f7f7f7;border-left:4px solid #0b3b5a}
+    pre{background:#f3f3f3;padding:12px;overflow:auto}
+    .footer{color:#666;font-size:13px;margin-top:36px;text-align:center}
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <h1>PARADIGMAS DE PROGRAMAÇÃO APLICADOS NO DESENVOLVIMENTO DO PROJETO MEGASTREAMHD</h1>
+    <p class="meta"><em>Uma Análise dos Paradigmas Orientado a Eventos, Declarativo e Imperativo</em></p>
+    <p class="meta">Disciplina: Linguagens de Programação — Professor: Gabriel</p>
+    <p class="meta">Luanda, Angola — 2026</p>
+  </div>
+
+  <div class="toc">
+    <strong>Sumário</strong>
+    <ul>
+      <li>Resumo</li>
+      <li>1. Introdução</li>
+      <li>2. Levantamento de Requisitos</li>
+      <li>3. Análise do Sistema</li>
+      <li>4. Projeto (Design) do Sistema</li>
+      <li>5. Tecnologias Utilizadas</li>
+      <li>6. Implementação</li>
+      <li>7. Análise Detalhada dos Paradigmas</li>
+      <li>8. Testes</li>
+      <li>9. Resultados</li>
+      <li>10. Conclusão</li>
+      <li>11. Referências</li>
+      <li>12. Anexos</li>
+    </ul>
+  </div>
+
+  <h2>Resumo</h2>
+  <p>Este relatório apresenta uma análise detalhada dos paradigmas de programação aplicados no desenvolvimento do projeto MegaStreamHD, uma plataforma web interativa de streaming de filmes e séries desenvolvida em JavaScript puro (Vanilla JS). O projeto foi construído como resposta aos requisitos da disciplina de Linguagens de Programação, demonstrando a aplicação prática de três paradigmas principais: orientado a eventos, declarativo e imperativo.</p>
+  <p>O MegaStreamHD integra uma arquitetura completa com frontend público (HTML/CSS/JavaScript), painel administrativo, sistema de autenticação via Supabase e um banco de dados relacional com políticas de segurança (RLS). A análise evidencia como diferentes paradigmas coexistem e complementam-se numa aplicação moderna, oferecendo vantagens específicas em termos de interatividade, estrutura e manutenibilidade.</p>
+  <p><strong>Palavras-chave:</strong> Paradigmas de Programação, JavaScript, Event-Driven, Declarativo, Imperativo, Aplicação Web, Frontend, Supabase.</p>
+
+  <h2>1. Introdução</h2>
+  <h3>1.1 Contextualização</h3>
+  <p>O projeto MegaStreamHD surge como resposta ao Projeto 9 da disciplina de Linguagens de Programação, com o objetivo de criar um sistema web interativo que demonstre a aplicação prática de diferentes paradigmas de programação. A escolha de JavaScript como linguagem principal decorre da sua natureza intrinsecamente orientada a eventos e da sua prevalência no desenvolvimento web contemporâneo.</p>
+
+  <h3>1.2 Justificativa</h3>
+  <p>As aplicações web modernas raramente seguem um único paradigma de forma isolada. O MegaStreamHD foi desenvolvido com a intenção de demonstrar como diferentes paradigmas podem coexistir harmoniosamente dentro de um único sistema, cada um contribuindo para diferentes aspectos da solução: interatividade (eventos), estrutura (declarativo) e lógica (imperativo).</p>
+
+  <h3>1.3 Objetivos</h3>
+  <p><strong>Geral:</strong> Desenvolver uma aplicação web interativa que demonstre a aplicação prática dos paradigmas de programação orientado a eventos, declarativo e imperativo.</p>
+  <p><strong>Específicos:</strong></p>
+  <ul>
+    <li>Implementar um sistema web com JavaScript que responda a eventos de utilizador</li>
+    <li>Demonstrar o uso de paradigma orientado a eventos na interatividade da aplicação</li>
+    <li>Exemplificar paradigma declarativo em HTML, CSS e SQL</li>
+    <li>Analisar paradigma imperativo na lógica interna das funções</li>
+    <li>Integrar autenticação e persistência de dados com Supabase</li>
+  </ul>
+
+  <h2>2. Levantamento de Requisitos</h2>
+  <h3>2.1 Requisitos Funcionais</h3>
+  <p>RF1 — Sistema de Filtros: O utilizador pode filtrar conteúdo por tipo (filmes/séries) e género (ação, comédia, ficção científica, etc.)</p>
+  <p>RF2 — Autenticação: Registo e login de utilizadores com validação de e-mail</p>
+  <p>RF3 — Painel Administrativo: Gestão de conteúdo (filmes, séries, episódios) e visualização de estatísticas</p>
+  <p>RF4 — Sistema de Comentários: Utilizadores podem comentar conteúdo</p>
+  <p>RF5 — Formulário de Pedidos: Interface para pedidos de novos conteúdos</p>
+  <p>RF6 — Player de Vídeo: Suporte para URLs de YouTube, Google Drive e vídeos diretos</p>
+  <p>RF7 — Pesquisa: Busca em tempo real de filmes e séries</p>
+
+  <h3>2.2 Requisitos Não-Funcionais</h3>
+  <p>RNF1 — Desempenho: Carregamento rápido com cache em memória</p>
+  <p>RNF2 — Segurança: Políticas RLS no Supabase para controle de acesso baseado em papéis</p>
+  <p>RNF3 — Usabilidade: Interface responsiva compatível com desktop e mobile</p>
+  <p>RNF4 — Manutenibilidade: Código modular separado em ficheiros (app.js, admin.js, data.js)</p>
+  <p>RNF5 — Escalabilidade: Arquitetura preparada para migração de localStorage para Supabase</p>
+
+  <h2>3. Análise do Sistema</h2>
+  <h3>3.1 Arquitetura Geral</h3>
+  <p>O MegaStreamHD segue uma arquitetura cliente-servidor com separação clara de responsabilidades:</p>
+  <ul>
+    <li>Frontend Público (index.html, app.js, style.css): Interface para utilizadores finais com navegação, filtros, detalhes de conteúdo e sistema de comentários.</li>
+    <li>Painel Administrativo (painel-gs7x2.html, admin.js, admin.css): Interface exclusiva para administradores com funcionalidades de CRUD.</li>
+    <li>Camada de Dados (data.js): Abstração que gerencia comunicação com Supabase, cache em memória e sincronização de dados.</li>
+    <li>Backend (Supabase): PostgreSQL com políticas RLS para controle de acesso e persistência de dados.</li>
+  </ul>
+
+  <h3>3.2 Utilizadores e Funções</h3>
+  <p>Utilizador Público: Acesso de leitura a filmes, séries, comentários e informações de conteúdo. Pode fazer login, comentar e submeter pedidos.</p>
+  <p>Administrador: Acesso completo de escrita (CRUD) para conteúdo, visualização de estatísticas, gestão de pedidos e configuração do site.</p>
+
+  <h2>4. Projeto (Design) do Sistema</h2>
+  <h3>4.1 Arquitetura do Frontend</h3>
+  <p>O frontend segue o padrão de programação orientado a eventos com estrutura HTML/CSS/JavaScript separada:</p>
+  <p>HTML (Declarativo): Define a estrutura estática da página.</p>
+  <p>CSS (Declarativo): Especifica regras de estilo.</p>
+  <p>JavaScript (Eventos + Imperativo): Implementa handlers de eventos e lógica de processamento de dados.</p>
+
+  <h3>4.2 Modelagem de Dados</h3>
+  <p>Tabelas principais no Supabase:</p>
+  <ul>
+    <li><strong>filmes</strong>: metadados de filmes (título, ano, géneros, rating, URL do vídeo)</li>
+    <li><strong>series</strong>: estrutura de temporadas e episódios em JSONB</li>
+    <li><strong>admins</strong>: IDs de administradores</li>
+    <li><strong>comments</strong>: comentários ligados a conteúdo</li>
+    <li><strong>pedidos</strong>: pedidos de conteúdo</li>
+  </ul>
+
+  <h2>5. Tecnologias Utilizadas</h2>
+  <p>JavaScript (ES6+), HTML5, CSS3, SQL (PostgreSQL). Ferramentas: Supabase, Netlify, Font Awesome, Google Fonts.</p>
+
+  <h2>6. Implementação</h2>
+  <p>Ficheiros principais: index.html, app.js, data.js, painel-gs7x2.html, admin.js, style.css, admin.css, supabase-schema.sql, README.md.</p>
+  <p>Principais funcionalidades implementadas:</p>
+  <ul>
+    <li>Carregamento dinâmico de filmes e séries com filtros</li>
+    <li>Hero slider com auto-play</li>
+    <li>Autenticação com Supabase</li>
+    <li>Painel admin com CRUD</li>
+    <li>Sistema de comentários</li>
+    <li>Player de vídeo multi-plataforma</li>
+    <li>Busca em tempo real</li>
+  </ul>
+
+  <h2>7. Análise Detalhada dos Paradigmas de Programação</h2>
+  <h3>7.1 Paradigma Orientado a Eventos</h3>
+  <p>O paradigma orientado a eventos é o predominante no MegaStreamHD. O fluxo de execução é determinado por eventos externos (cliques, hashchange, auth state changes).</p>
+  <pre>&lt;a onclick="filterContent('filmes','acao')"&gt;Ação&lt;/a&gt;</pre>
+  <p>Ex.: handlers como <code>sup.auth.onAuthStateChange(...)</code> executam lógica em resposta a mudanças de autenticação.</p>
+
+  <h3>7.2 Paradigma Declarativo</h3>
+  <p>Manifestado em HTML, CSS e SQL (políticas RLS declarativas).</p>
+  <pre>.card { background: #1a1a1a; border-radius: 8px; }</pre>
+  <p>Ex.: políticas SQL declarando regras de autorização.</p>
+
+  <h3>7.3 Paradigma Imperativo</h3>
+  <p>Presente nas funções JavaScript que especificam passo-a-passo a transformação de dados (ex.: <code>filterContent()</code>).</p>
+
+  <h2>8. Testes</h2>
+  <p>Testes realizados: funcionais manuais, compatibilidade, responsividade, integração e segurança (RLS).</p>
+  <p>Resultados: filtros, autenticação, painel admin e responsividade funcionando; sem erros JS no console.</p>
+
+  <h2>9. Resultados</h2>
+  <p>O projeto foi desenvolvido com sucesso, integrando os paradigmas analisados e funcionalidades previstas.</p>
+
+  <h2>10. Conclusão</h2>
+  <p>Aplicações web modernas combinam paradigmas: event-driven para interatividade, declarativo para estrutura e apresentação, e imperativo para lógica de processamento.</p>
+
+  <h2>11. Referências</h2>
+  <ul>
+    <li>SEBESTA, Robert W. Conceitos de Linguagens de Programação. Bookman, 2018.</li>
+    <li>DEITEL, Paul M.; DEITEL, Harvey M. JavaScript: How to Program. Pearson, 2011.</li>
+    <li>SUPABASE. Documentação oficial: Row Level Security. https://supabase.com/docs</li>
+    <li>MDN Web Docs. Event Reference. https://developer.mozilla.org/</li>
+  </ul>
+
+  <h2>12. Anexos</h2>
+  <p>Estrutura de ficheiros do projeto (resumo):</p>
+  <pre>
+MegaStreamHD/
+├── index.html
+├── painel-gs7x2.html
+├── app.js
+├── admin.js
+├── data.js
+├── style.css
+├── admin.css
+├── supabase-config.js
+├── supabase-schema.sql
+└── README.md
+  </pre>
+
+  <div class="footer">Arquivo gerado automaticamente. Para salvar como PDF: abra este ficheiro no navegador e use <strong>Imprimir → Salvar como PDF</strong>.</div>
+</body>
+</html>

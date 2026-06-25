@@ -294,6 +294,13 @@ select { appearance: none; cursor: pointer; }
   .season-select { width: 100%; }
   .header-actions .btn-register { display: none; }
   .header-actions .btn-admin { display: none; }
+  .search-box input { width: 90px; }
+  .header-inner { gap: 10px; padding: 0 14px; }
+}
+
+@media (max-width: 400px) {
+  .search-box input { width: 70px; font-size: 12px; }
+  .logo-text { font-size: 15px; }
 }
 
 /* ===================== ANIMATIONS ===================== */

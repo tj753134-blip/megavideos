@@ -370,7 +370,7 @@ function saveContent() {
       if (typeof window.supabaseClient === 'undefined') throw new Error('Supabase não configurado');
       const sup = window.supabaseClient;
       const payload = { ...content };
-      if (!editingContent) delete payload.id; // let DB generate id on insert
+      if (!editingContent) payload.id = payload.id || Date.now(); // garantir id manual para novos registros
       // tentar upsert incluindo 'servers' se presente; se o banco não tiver essa coluna, tentar novamente sem ela
       let { data, error } = await sup.from(key).upsert(payload).select();
       if (error) {
